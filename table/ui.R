@@ -7,22 +7,29 @@ library(plotly)
 shinyUI(fluidPage(
   fluidRow(
     column(4,
-           br(),
-          downloadButton("downloadData", "Download selected data")
-    ),
-    column(4,
            fileInput('query_file', 
-                     label = "Query file listing queries, 1 per line")
-    ),
-    column(4,
+                     label = "File listing queries, 1 per line"),
            textInput('query_column', 
                      label = 'Which column to query? ("all" = all columns)',
-                     value = 'all'),   
-           checkboxGroupInput('filters',
-                         label = 'Filters',
-                         choices = c('Just show unused samples?' = 'show_unused',
-                                     'Just show used samples?' = 'show_used')
-                         )
+                     value = 'all') 
+    ),
+    column(3,
+           checkboxGroupInput('tables',
+                              label = 'Data to show',
+                              choices = c('Show collection metadata?' = 'show_collection',
+                                          'Show additional metadata?' = 'show_additional',
+                                          'Show E662 anxiety scores?' = 'show_E662_AS',
+                                          'Show E662 raw data?' = 'show_E662_raw',
+                                          'Show E788 raw data?' = 'show_E788_raw',
+                                          'Show E788 data key?' = 'show_E788_key',
+                                          'Show 16S qiime2 data?' = 'show_16S_qiime2',
+                                          'Show metagenome data?' = 'show_metagenome')
+           )
+    ),
+    column(2, 
+           br(),
+           br(),
+           downloadButton("downloadData", "Download selected data")
     )
   ),
   tags$hr(),
