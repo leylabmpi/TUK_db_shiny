@@ -13,7 +13,7 @@ shinyUI(fluidPage(
                      label = 'Which column to query? ("all" = all columns)',
                      value = 'all') 
     ),
-    column(3,
+    column(4,
            checkboxGroupInput('tables',
                               label = 'Data to show',
                               choices = c('Show collection metadata?' = 'show_collection',
@@ -23,7 +23,8 @@ shinyUI(fluidPage(
                                           'Show E788 raw data?' = 'show_E788_raw',
                                           'Show E788 data key?' = 'show_E788_key',
                                           'Show 16S qiime2 data?' = 'show_16S_qiime2',
-                                          'Show metagenome data?' = 'show_metagenome')
+                                          'Show metagenome data?' = 'show_metagenome',
+                                          'Show twubif genome capture data?' = 'show_twubif_capture')
            )
     ),
     column(2, 

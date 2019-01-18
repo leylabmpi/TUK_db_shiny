@@ -16,6 +16,7 @@ E788_raw = file.path(db_dir, 'E788.tsv')
 E788_key = file.path(db_dir, 'E788_key.tsv')
 rRNA16S_qiime2 = file.path(db_dir, '16S_qiime2.tsv')
 metagenome = file.path(db_dir, 'metagenomes.tsv')
+twubif_bifido_capture = file.path(db_dir, 'twubif_bifido_capture.tsv')
 
 #-- server --#
 shinyServer(function(input, output, session) {
@@ -76,6 +77,12 @@ shinyServer(function(input, output, session) {
     if('show_metagenome' %in% input$tables){
       x = x %>%
         left_join(read.delim(metagenome, sep='\t'),
+                  c('s.FPBarcode' = 'Sample'))
+    } 
+    ## twubif
+    if('show_twubif_capture' %in% input$tables){
+      x = x %>%
+        left_join(read.delim(twubif_bifido_capture, sep='\t'),
                   c('s.FPBarcode' = 'Sample'))
     } 
     
