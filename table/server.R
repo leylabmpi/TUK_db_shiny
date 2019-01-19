@@ -61,7 +61,7 @@ shinyServer(function(input, output, session) {
     if('show_E539_medication' %in% input$tables_E539){
       x = x %>%
         left_join(read.delim(E539_medication, sep='\t'),
-                  c('i.IndividualID'))
+                  c('s.NameOnSampleWithOutAnon' = 'Microbiome_ID'))
     } 
     ## E662 
     if('show_E662_AS' %in% input$tables_E662){
