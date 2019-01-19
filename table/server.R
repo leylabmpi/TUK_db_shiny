@@ -5,8 +5,8 @@ library(dplyr)
 source("../utils/io.R")
 
 
-#db_dir = '/Volumes/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
-db_dir = '/ebio/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
+db_dir = '/Volumes/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
+#db_dir = '/ebio/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
 # basic metadata
 metadata_basic = file.path(db_dir, 'metadata_basic.tsv')
 metadata_collection = file.path(db_dir, 'metadata__collection.tsv')
@@ -39,70 +39,136 @@ shinyServer(function(input, output, session) {
       } else {
         x = x[x[,input$query_column] %in% q[,1],]  
       }
-    } 
-    # table joins 
-    ## extended basic metadata
-    if('show_collection' %in% input$tables_misc){
-      x = x %>%
-        left_join(read.delim(metadata_collection, sep='\t'),
-                  c('s.FPBarcode'))
-    } 
-    if('show_additional' %in% input$tables_misc){
-      x = x %>%
-        left_join(read.delim(metadata_additional, sep='\t'),
-                  c('s.FPBarcode'))
-    } 
-    ## E539
-    if('show_E539_immune' %in% input$tables_E539){
-      x = x %>%
-        left_join(read.delim(E539_immune, sep='\t'),
-                  c('i.IndividualID'))
-    } 
-    if('show_E539_medication' %in% input$tables_E539){
-      x = x %>%
-        left_join(read.delim(E539_medication, sep='\t'),
-                  c('s.NameOnSampleWithOutAnon' = 'Microbiome_ID'))
-    } 
-    ## E662 
-    if('show_E662_AS' %in% input$tables_E662){
-      x = x %>%
-        left_join(read.delim(E662_AS, sep='\t'),
-                  c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
-    } 
-    if('show_E662_raw' %in% input$tables_E662){
-      x = x %>%
-        left_join(read.delim(E662_raw, sep='\t'),
-                  c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
-    } 
-    ## E788
-    if('show_E788_raw' %in% input$tables_E788){
-      x = x %>%
-        left_join(read.delim(E788_raw, sep='\t'),
-                  c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
-    } 
-    if('show_E788_raw' %in% input$tables_E788 & 'show_E788_key' %in% input$tables_E788){
-      x = x %>%
-        left_join(read.delim(E788_key, sep='\t'),
-                  c('E788_phenID' = 'PhenID',
-                    'E788_phen_value' = 'Phen_value'))
-    } 
-    ## 16S
-    if('show_16S_qiime2' %in% input$tables_seq){
-      x = x %>%
-        left_join(read.delim(rRNA16S_qiime2, sep='\t'),
-                  c('s.FPBarcode' = 'FPBarcode'))
-    } 
-    if('show_metagenome' %in% input$tables_seq){
-      x = x %>%
-        left_join(read.delim(metagenome, sep='\t'),
-                  c('s.FPBarcode' = 'Sample'))
-    } 
-    ## twubif
-    if('show_twubif_capture' %in% input$tables_seq){
-      x = x %>%
-        left_join(read.delim(twubif_bifido_capture, sep='\t'),
-                  c('s.FPBarcode' = 'Sample'))
-    } 
+    }
+    if(input$inner_join){
+      # table joins 
+      ## extended basic metadata
+      if('show_collection' %in% input$tables_misc){
+        x = x %>%
+          inner_join(read.delim(metadata_collection, sep='\t'),
+                     c('s.FPBarcode'))
+      } 
+      if('show_additional' %in% input$tables_misc){
+        x = x %>%
+          inner_join(read.delim(metadata_additional, sep='\t'),
+                     c('s.FPBarcode'))
+      } 
+      ## E539
+      if('show_E539_immune' %in% input$tables_E539){
+        x = x %>%
+          inner_join(read.delim(E539_immune, sep='\t'),
+                     c('i.IndividualID'))
+      } 
+      if('show_E539_medication' %in% input$tables_E539){
+        x = x %>%
+          inner_join(read.delim(E539_medication, sep='\t'),
+                     c('s.NameOnSampleWithOutAnon' = 'Microbiome_ID'))
+      } 
+      ## E662 
+      if('show_E662_AS' %in% input$tables_E662){
+        x = x %>%
+          inner_join(read.delim(E662_AS, sep='\t'),
+                     c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      if('show_E662_raw' %in% input$tables_E662){
+        x = x %>%
+          inner_join(read.delim(E662_raw, sep='\t'),
+                     c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      ## E788
+      if('show_E788_raw' %in% input$tables_E788){
+        x = x %>%
+          inner_join(read.delim(E788_raw, sep='\t'),
+                     c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      if('show_E788_raw' %in% input$tables_E788 & 'show_E788_key' %in% input$tables_E788){
+        x = x %>%
+          inner_join(read.delim(E788_key, sep='\t'),
+                     c('E788_phenID' = 'PhenID',
+                       'E788_phen_value' = 'Phen_value'))
+      } 
+      ## 16S
+      if('show_16S_qiime2' %in% input$tables_seq){
+        x = x %>%
+          inner_join(read.delim(rRNA16S_qiime2, sep='\t'),
+                     c('s.FPBarcode' = 'FPBarcode'))
+      } 
+      if('show_metagenome' %in% input$tables_seq){
+        x = x %>%
+          inner_join(read.delim(metagenome, sep='\t'),
+                     c('s.FPBarcode' = 'Sample'))
+      } 
+      ## twubif
+      if('show_twubif_capture' %in% input$tables_seq){
+        x = x %>%
+          inner_join(read.delim(twubif_bifido_capture, sep='\t'),
+                     c('s.FPBarcode' = 'Sample'))
+      } 
+    } else {
+      # table joins 
+      ## extended basic metadata
+      if('show_collection' %in% input$tables_misc){
+        x = x %>%
+          left_join(read.delim(metadata_collection, sep='\t'),
+                    c('s.FPBarcode'))
+      } 
+      if('show_additional' %in% input$tables_misc){
+        x = x %>%
+          left_join(read.delim(metadata_additional, sep='\t'),
+                    c('s.FPBarcode'))
+      } 
+      ## E539
+      if('show_E539_immune' %in% input$tables_E539){
+        x = x %>%
+          left_join(read.delim(E539_immune, sep='\t'),
+                    c('i.IndividualID'))
+      } 
+      if('show_E539_medication' %in% input$tables_E539){
+        x = x %>%
+          left_join(read.delim(E539_medication, sep='\t'),
+                    c('s.NameOnSampleWithOutAnon' = 'Microbiome_ID'))
+      } 
+      ## E662 
+      if('show_E662_AS' %in% input$tables_E662){
+        x = x %>%
+          left_join(read.delim(E662_AS, sep='\t'),
+                    c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      if('show_E662_raw' %in% input$tables_E662){
+        x = x %>%
+          left_join(read.delim(E662_raw, sep='\t'),
+                    c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      ## E788
+      if('show_E788_raw' %in% input$tables_E788){
+        x = x %>%
+          left_join(read.delim(E788_raw, sep='\t'),
+                    c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
+      } 
+      if('show_E788_raw' %in% input$tables_E788 & 'show_E788_key' %in% input$tables_E788){
+        x = x %>%
+          left_join(read.delim(E788_key, sep='\t'),
+                    c('E788_phenID' = 'PhenID',
+                      'E788_phen_value' = 'Phen_value'))
+      } 
+      ## 16S
+      if('show_16S_qiime2' %in% input$tables_seq){
+        x = x %>%
+          left_join(read.delim(rRNA16S_qiime2, sep='\t'),
+                    c('s.FPBarcode' = 'FPBarcode'))
+      } 
+      if('show_metagenome' %in% input$tables_seq){
+        x = x %>%
+          left_join(read.delim(metagenome, sep='\t'),
+                    c('s.FPBarcode' = 'Sample'))
+      } 
+      ## twubif
+      if('show_twubif_capture' %in% input$tables_seq){
+        x = x %>%
+          left_join(read.delim(twubif_bifido_capture, sep='\t'),
+                    c('s.FPBarcode' = 'Sample'))
+      } 
+    }
     
     # filter by query again
     if(!is.null(q)){

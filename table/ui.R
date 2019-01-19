@@ -13,7 +13,7 @@ shinyUI(fluidPage(
                      label = "File listing queries, 1 per line"),
            textInput('query_column', 
                      label = 'Which column to query? ("all" = all columns)',
-                     value = 'all') 
+                     value = 'all')
     ),
     column(3,
            checkboxGroupInput('tables',
@@ -24,7 +24,10 @@ shinyUI(fluidPage(
                                           'Show E539 metadata?' = 'show_E539',
                                           'Show sequence data?' = 'show_seq')
            ),
-           h5('WARNING: table joins on tables with many values will be slow')
+           h5('WARNING: table joins on tables with many values will be slow'),
+           checkboxInput('inner_join', 
+                         'Just overlapping values?',
+                         value = FALSE)
     ),
     column(4, 
            conditionalPanel(
