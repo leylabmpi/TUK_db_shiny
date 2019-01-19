@@ -5,8 +5,8 @@ library(dplyr)
 source("../utils/io.R")
 
 
-db_dir = '/Volumes/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
-#db_dir = '/ebio/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
+#db_dir = '/Volumes/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
+db_dir = '/ebio/abt3_projects/TwinsUK/Dataset_summary/metadata_db/'
 # basic metadata
 metadata_basic = file.path(db_dir, 'metadata_basic.tsv')
 metadata_collection = file.path(db_dir, 'metadata__collection.tsv')
