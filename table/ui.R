@@ -27,7 +27,7 @@ shinyUI(fluidPage(
            h5('WARNING: table joins on tables with many values will be slow'),
            checkboxInput('inner_join', 
                          'Just overlapping values?',
-                         value = FALSE)
+                         value = TRUE)
     ),
     column(4, 
            conditionalPanel(
