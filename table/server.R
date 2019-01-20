@@ -12,13 +12,15 @@ metadata_basic = file.path(db_dir, 'metadata_basic.tsv')
 metadata_collection = file.path(db_dir, 'metadata__collection.tsv')
 metadata_additional = file.path(db_dir, 'metadata_additional.tsv')
 # E539
+E539_key = file.path(db_dir, 'E539_key.tsv')
 E539_immune = file.path(db_dir, 'E539_immune.tsv')
 E539_medication = file.path(db_dir, 'E539_medication.tsv')
 # E662
 E662_AS = file.path(db_dir, 'E662_AS.tsv')
 E662_raw = file.path(db_dir, 'E662_raw.tsv')
-E788_raw = file.path(db_dir, 'E788.tsv')
+E662_key = file.path(db_dir, 'E662_key.tsv')
 # E788
+E788_raw = file.path(db_dir, 'E788.tsv')
 E788_key = file.path(db_dir, 'E788_key.tsv')
 # sequence data
 rRNA16S_qiime2 = file.path(db_dir, '16S_qiime2.tsv')
@@ -64,6 +66,20 @@ shinyServer(function(input, output, session) {
           inner_join(read.delim(E539_medication, sep='\t'),
                      c('s.NameOnSampleWithOutAnon' = 'Microbiome_ID'))
       } 
+      if('show_E539_key' %in% input$tables_E539 & 
+         'show_E539_immune' %in% input$tables_E539){
+        x = x %>%
+          inner_join(read.delim(E539_key, sep='\t'),
+                     c('E539_immune_phenID' = 'E539_phenID',
+                       'E539_immune_phen_value' = 'E539_phen_value_code'))
+      }
+      if('show_E539_key' %in% input$tables_E539 & 
+         'show_E539_medication' %in% input$tables_E539){
+        x = x %>%
+          inner_join(read.delim(E539_key, sep='\t'),
+                     c('E539_medication_phenID' = 'E539_phenID',
+                       'E539_medication_phen_value' = 'E539_phen_value_code'))
+      }
       ## E662 
       if('show_E662_AS' %in% input$tables_E662){
         x = x %>%
@@ -75,13 +91,20 @@ shinyServer(function(input, output, session) {
           inner_join(read.delim(E662_raw, sep='\t'),
                      c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
       } 
+      if('show_E662_key' %in% input$tables_E662 &
+         'show_E662_raw' %in% input$tables_E662){
+        x = x %>%
+          inner_join(read.delim(E662_key, sep='\t'),
+                     c('E662_phenID', 'E662_phen_value'))
+      }
       ## E788
       if('show_E788_raw' %in% input$tables_E788){
         x = x %>%
           inner_join(read.delim(E788_raw, sep='\t'),
                      c('s.NameOnSampleWithAnon' = 'Microbiome_ID'))
       } 
-      if('show_E788_raw' %in% input$tables_E788 & 'show_E788_key' %in% input$tables_E788){
+      if('show_E788_raw' %in% input$tables_E788 & 
+         'show_E788_key' %in% input$tables_E788){
         x = x %>%
           inner_join(read.delim(E788_key, sep='\t'),
                      c('E788_phenID' = 'PhenID',

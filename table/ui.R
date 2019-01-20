@@ -43,7 +43,8 @@ shinyUI(fluidPage(
              checkboxGroupInput('tables_E662',
                                 label = 'E662 metadata',
                                 choices = c('Show E662 anxiety scores?' = 'show_E662_AS',
-                                            'Show E662 raw data?' = 'show_E662_raw'))
+                                            'Show E662 raw data?' = 'show_E662_raw',
+                                            'Show E662 data key?' = 'show_E662_key'))
            ),
            conditionalPanel(
              'input.tables.includes("show_E788")',   
@@ -57,7 +58,8 @@ shinyUI(fluidPage(
              checkboxGroupInput('tables_E539',
                                 label = 'E539 metadata',
                                 choices = c('Show E539 immune data?' = 'show_E539_immune',
-                                            'Show E539 medication data?' = 'show_E539_medication'))
+                                            'Show E539 medication data?' = 'show_E539_medication',
+                                            'Show E539 value key?' = 'show_E539_key'))
            ),
            conditionalPanel(
              'input.tables.includes("show_seq")',   
