@@ -236,7 +236,7 @@ shinyServer(function(input, output, session) {
       'TUK_metadata.csv'
     },
     content = function(file) {
-      write.csv(data()[input$table_rows_all, , drop=FALSE], file, row.names = FALSE)
+      write.csv(data()[input$table_rows_all, , drop=FALSE], file, row.names=FALSE, quote=FALSE)
     }
   )
 
