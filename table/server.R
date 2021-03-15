@@ -174,7 +174,8 @@ shinyServer(function(input, output, session) {
     ## twubif
     if('show_twubif_capture' %in% input$tables_seq){
       x = x %>%
-        JOIN(fread(twubif_bifido_capture, sep='\t'),
+        JOIN(fread(twubif_bifido_capture, sep='\t') %>%
+               mutate.(Sample = Sample %>% as.character %>% as.numeric),
              c('s.FPBarcode' = 'Sample'))
     }
 
