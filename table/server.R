@@ -40,7 +40,8 @@ twubif_bifido_capture = file.path(db_dir, 'twubif_bifido_capture.tsv')
 shinyServer(function(input, output, session) {
   # querying database & making data table
   data = reactive({
-    x = fread(metadata_basic, sep='\t')
+    x = fread(metadata_basic, sep='\t') %>%
+        mutate(s.FPBarcode = s.FPBarcode %>% as.character)
     # filtering table
     ## by query file
     q = query()
@@ -65,12 +66,14 @@ shinyServer(function(input, output, session) {
     ## extended basic metadata
     if('show_collection' %in% input$tables_misc){
       x = x %>%
-        JOIN(fread(metadata_collection, sep='\t'),
+        JOIN(fread(metadata_collection, sep='\t') %>%
+               mutate.(s.FPBarcode = s.FPBarcode %>% as.character),
              c('s.FPBarcode'))
     }
     if('show_additional' %in% input$tables_misc){
       x = x %>%
-        JOIN(fread(metadata_additional, sep='\t'),
+        JOIN(fread(metadata_additional, sep='\t') %>%
+               mutate.(s.FPBarcode = s.FPBarcode %>% as.character),
              c('s.FPBarcode'))
     }
     ## E538
@@ -160,7 +163,8 @@ shinyServer(function(input, output, session) {
       x = x %>%
         JOIN(fread(rRNA16S_qiime2, sep='\t') %>%
                mutate.(r16S_read1_exists = sapply(r16S_read1, function(x) check_file(x)),
-                       r16S_read2_exists = sapply(r16S_read2, function(x) check_file(x))),
+                       r16S_read2_exists = sapply(r16S_read2, function(x) check_file(x)),
+                       FPBarcode = FPBarcode %>% as.character),
              c('s.FPBarcode' = 'FPBarcode'))
     }
     if('show_metagenome' %in% input$tables_seq){
@@ -168,14 +172,15 @@ shinyServer(function(input, output, session) {
         JOIN(fread(metagenome, sep='\t') %>%
                mutate.(MG_read1_exists = sapply(MG_read1, function(x) check_file(x)),
                        MG_read2_exists = sapply(MG_read2, function(x) check_file(x)),
-                       MG_read12_exists = sapply(MG_read12, function(x) check_file(x))),
+                       MG_read12_exists = sapply(MG_read12, function(x) check_file(x)),
+                       Sample = Sample %>% as.character),
              c('s.FPBarcode' = 'Sample'))
     }
     ## twubif
     if('show_twubif_capture' %in% input$tables_seq){
       x = x %>%
         JOIN(fread(twubif_bifido_capture, sep='\t') %>%
-               mutate.(Sample = Sample %>% as.character %>% as.numeric),
+               mutate.(Sample = Sample %>% as.character),
              c('s.FPBarcode' = 'Sample'))
     }
 
