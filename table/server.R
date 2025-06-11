@@ -214,7 +214,7 @@ shinyServer(function(input, output, session) {
     return(paste('No. of records selected:', x, sep=' '))
   })
   output$n_individuals = reactive({
-    x = dt_table() %>% distinct.(i.IndividualID) %>% nrow
+    x = dt_table() %>% distinct(i.IndividualID) %>% nrow
     return(paste('No. of individuals selected:', x, sep=' '))
   })
   # rendering data table
